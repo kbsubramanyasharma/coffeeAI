@@ -44,8 +44,8 @@ const MainApp = () => {
     await removeItem(cartId);
   };
 
-  const handleClearCart = async () => {
-    await clearCart();
+  const handleClearCart = async (successMessage?: string) => {
+    await clearCart(successMessage);
   };
 
   const toggleChat = () => {

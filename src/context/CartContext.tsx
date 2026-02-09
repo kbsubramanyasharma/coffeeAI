@@ -17,7 +17,7 @@ interface CartContextType {
   addToCart: (product: Product) => Promise<void>;
   updateQuantity: (cartId: string, newQuantity: number) => Promise<void>;
   removeItem: (cartId: string) => Promise<void>;
-  clearCart: () => Promise<void>;
+  clearCart: (successMessage?: string) => Promise<void>;
   refreshCart: () => Promise<void>;
   getProductQuantityInCart: (productId: string) => number;
 }
@@ -141,14 +141,22 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const clearCart = async () => {
+  const clearCart = async (successMessage?: string) => {
     if (!(isLoggedIn() && userId && token)) return;
     
     try {
       const sessionId = localStorage.getItem('session_id');
       await apiService.clearCart(sessionId, parseInt(userId), token);
       setCartItems([]);
-      toast({ title: 'Success', description: 'Cart cleared successfully' });
+      // Only show toast if a custom message is not provided (for backward compatibility)
+      if (successMessage !== undefined) {
+        if (successMessage) {
+          toast({ title: 'Success', description: successMessage });
+        }
+        // If empty string is passed, don't show any toast
+      } else {
+        toast({ title: 'Success', description: 'Cart cleared successfully' });
+      }
     } catch (error) {
       console.error('Failed to clear cart:', error);
       toast({ title: 'Error', description: 'Failed to clear cart. Please try again.' });

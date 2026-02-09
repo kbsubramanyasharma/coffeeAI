@@ -22,7 +22,7 @@ interface CartItem extends Product {
 
 interface CheckoutProps {
   cartItems: CartItem[];
-  onClearCart: () => void;
+  onClearCart: (successMessage?: string) => void;
 }
 
 interface CheckoutForm {
@@ -164,11 +164,11 @@ const Checkout = ({ cartItems, onClearCart }: CheckoutProps) => {
       // 2. Call backend to place order
       await apiService.checkout(orderData, token);
 
-      // 3. On success, clear cart and show message
-      onClearCart();
+      // 3. On success, clear cart (without showing cart cleared message) and show order success message
+      onClearCart(''); // Empty string to suppress the default "cart cleared" message
       toast({
         title: "Order Placed Successfully!",
-        description: "Thank you for your order. You will receive a confirmation email shortly.",
+        description: "Your order has been placed successfully. You will receive a confirmation email shortly.",
       });
       navigate('/');
 

@@ -173,7 +173,10 @@ const Cart = ({ cartItems, onUpdateQuantity, onRemoveItem, onClearCart }: CartPr
                 
                 <Button 
                   variant="destructive" 
-                  onClick={onClearCart}
+                  onClick={() => {
+                    onClearCart();
+                    navigate('/');
+                  }}
                   className="text-sm"
                 >
                   Clear Cart

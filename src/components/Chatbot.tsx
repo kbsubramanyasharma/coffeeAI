@@ -98,13 +98,26 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, onToggle }) => {
       console.log('Fetched chat history:', data);
 
       // Convert backend format to frontend format
-      const fetchedMessages: Message[] = data.messages.map((msg: any) => ({
-        id: msg.id || Date.now().toString(),
-        text: msg.text || '',
-        isBot: msg.isBot || false,
-        timestamp: new Date(msg.timestamp || Date.now()),
-        products: [], // Products aren't stored in history, only in current responses
-      }));
+      const fetchedMessages: Message[] = data.messages.map((msg: any) => {
+        // Parse timestamp - handle both ISO format and SQLite datetime format
+        let timestamp = new Date();
+        if (msg.timestamp) {
+          // SQLite CURRENT_TIMESTAMP format: "YYYY-MM-DD HH:MM:SS"
+          // Add "Z" to treat as UTC if no timezone info present
+          const timestampStr = msg.timestamp.includes('T') || msg.timestamp.includes('Z') 
+            ? msg.timestamp 
+            : msg.timestamp.replace(' ', 'T') + 'Z';
+          timestamp = new Date(timestampStr);
+        }
+        
+        return {
+          id: msg.id || Date.now().toString(),
+          text: msg.text || '',
+          isBot: msg.isBot || false,
+          timestamp: timestamp,
+          products: [], // Products aren't stored in history, only in current responses
+        };
+      });
 
       setMessages(fetchedMessages);
       setHistoryLoaded(true);
