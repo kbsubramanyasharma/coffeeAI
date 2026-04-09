@@ -374,8 +374,11 @@ class RAGSystem:
         
         except Exception as e:
             logger.error(f"Error generating response: {e}")
+            logger.error(f"Error details: {str(e)}")
+            import traceback
+            logger.error(f"Full traceback: {traceback.format_exc()}")
             return {
-                "response": "I apologize, but I'm having trouble processing your request right now. Please try again.",
+                "response": f"I apologize, but I'm having trouble processing your request right now. Error: {str(e)[:100]}",
                 "intent": "error",
                 "agent": "System",
                 "sources": [],

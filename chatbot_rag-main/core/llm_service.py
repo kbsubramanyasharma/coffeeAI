@@ -90,8 +90,8 @@ class LLMService:
                 raise ValueError("Missing GEMINI_API_KEY environment variable")
             
             genai.configure(api_key=api_key)
-            self.gemini_client = genai.GenerativeModel(model_name="gemini-2.0-flash-lite")
-            logger.info("Initialized Gemini 2.0 Flash-Lite model")
+            self.gemini_client = genai.GenerativeModel(model_name="models/gemini-2.5-flash")
+            logger.info("Initialized Gemini 2.5 Flash model")
         except ImportError:
             raise ImportError("Missing google-generativeai package")
     
