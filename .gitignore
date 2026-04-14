@@ -1,3 +1,13 @@
 
 node_modules
 .env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Local Database & Vectorstores
+*.db
+*.sqlite3
+data/vectorstore/
+chatbot_rag-main/data/vectorstore/
